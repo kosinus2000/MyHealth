@@ -15,17 +15,17 @@
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/nav_settings"
-            android:title="Settings"/>
+            android:title="Ustawienia"/>
 
         <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/nav_share"
-            android:title="Share"/>
+            android:id="@+id/nav_add"
+            android:icon="@drawable/nav_add"
+            android:title="Dodaj lek"/>
 
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/nav_about"
-            android:title="About Us"/>
+            android:title="O nas"/>
     </group>
     <item
         android:title="">
