@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,8 @@ public class AddDrugActivity extends AppCompatActivity {
     private int obecnyMiesiac = obecnaData.getMonthValue();
     private int obecnyRok = obecnaData.getYear();
     private String data;
+
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,16 @@ public class AddDrugActivity extends AppCompatActivity {
 
     public void SetDate() {
         lek.setDate(data);
+    }
+
+    public void AddFoto(View v){
+        imageView = findViewById(R.id.imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     public void DodajLek(View v) {
