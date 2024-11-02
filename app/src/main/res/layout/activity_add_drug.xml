@@ -13,10 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
+        android:textColor="@color/black"
         android:text="Dodaj lek"
         android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
 
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,12 +30,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:hint="Nazwa leku"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView3">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextNazwa"
+            android:background="@drawable/bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -53,6 +56,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextIlosc"
+            android:background="@drawable/bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number" />
@@ -72,21 +76,38 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextData"
+            android:background="@drawable/bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Widok zdjecia -->
     <!-- Przycisk Dodaj -->
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextInputLayoutData"
+        tools:src="@drawable/addfoto" />
+
     <Button
         android:id="@+id/dodaj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Dodaj"
         android:onClick="DodajLek"
+        android:text="Dodaj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TextInputLayoutData" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
