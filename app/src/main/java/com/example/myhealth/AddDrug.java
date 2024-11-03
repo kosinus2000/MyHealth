@@ -1,5 +1,7 @@
 package com.example.myhealth;
 
+import android.graphics.Bitmap;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -11,6 +13,7 @@ public class AddDrug {
     private int amount;
     private LocalDate expirationDate;
     private DateTimeFormatter formatka = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private Bitmap photo;
 
     public AddDrug() {
         this.id = ++idCounter;
@@ -50,5 +53,13 @@ public class AddDrug {
 
     public String getFormattedDate() {
         return expirationDate != null ? expirationDate.format(formatka) : "Brak daty";
+    }
+
+    public Bitmap getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
     }
 }
