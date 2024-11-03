@@ -209,5 +209,9 @@ public class AddDrugActivity extends AppCompatActivity {
         textIlosc.setText("");
         edycjaDaty.setText("");
         button.setEnabled(false);
+        ResetujZdjecie();
+    }
+    public void ResetujZdjecie() {
+        imageView.setImageResource(0);
     }
 }
