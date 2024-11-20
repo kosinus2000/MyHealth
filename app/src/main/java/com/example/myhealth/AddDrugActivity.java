@@ -202,14 +202,15 @@ public class AddDrugActivity extends AppCompatActivity {
         AddAmountOfDrug();
         SetDate();
         AddFoto();
-        Toast.makeText(this, "Dodano lek: " + lek.getName() + ", Ilość: " + lek.getAmount() + ", Data ważności: " + lek.getFormattedDate(), Toast.LENGTH_LONG).show();
-
+        DataBaseSQLiteInterface dbHelper = new DataBaseSQLiteInterface(this);
+        dbHelper.addDrug(lek);
         nazwaLeku.setText("");
         EditText textIlosc = findViewById(R.id.textInputEditTextIlosc);
         textIlosc.setText("");
         edycjaDaty.setText("");
         button.setEnabled(false);
         ResetujZdjecie();
+
     }
     public void ResetujZdjecie() {
         imageView.setImageResource(0);

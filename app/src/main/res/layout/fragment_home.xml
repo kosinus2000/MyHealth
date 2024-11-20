@@ -29,7 +29,7 @@
         android:onClick="launchAddDrug"/>
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/ListaLekow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView4"
@@ -40,5 +40,14 @@
         android:layout_toEndOf="@+id/toDodajLek"
         android:onClick="launchListOfDrugs"
         android:text="Lista leków" />
+
+    <Button
+        android:id="@+id/harmonogram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toDodajLek"
+        android:layout_marginTop="79dp"
+        android:layout_marginStart="71dp"
+        android:text="Harmonogram" />
 
 </RelativeLayout>

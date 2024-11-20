@@ -17,7 +17,10 @@ public class AddDrug {
 
     public AddDrug() {
         this.id = ++idCounter;
-        this.amount = 0;
+        this.name = name;
+        this.amount = amount;
+        setDate(String.valueOf(expirationDate));
+        this.photo = photo;
     }
 
     public int getIdCounter() {
