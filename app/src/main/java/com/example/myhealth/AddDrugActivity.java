@@ -15,8 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
-
+import android.widget.CheckBox;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,9 +47,9 @@ public class AddDrugActivity extends AppCompatActivity {
     private int obecnyMiesiac = obecnaData.getMonthValue();
     private int obecnyRok = obecnaData.getYear();
     private String data;
-
     private ImageView imageView, gallery, camera;
-
+    private CheckBox harmonogramCheckbox;
+    private LinearLayout harmonogramForm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +61,10 @@ public class AddDrugActivity extends AppCompatActivity {
         nazwaLeku = findViewById(R.id.textInputEditTextNazwa);
         edycjaDaty = findViewById(R.id.textInputEditTextData);
         imageView = findViewById(R.id.imageView);
-        camera = findViewById(R.id.imageButton);
-        gallery = findViewById(R.id.imageButtonFromFile);
-
+        camera = findViewById(R.id.imageButtonCamera);
+        gallery = findViewById(R.id.imageButtonFile);
+        harmonogramCheckbox = findViewById(R.id.harmonogram_checkbox);
+        harmonogramForm = findViewById(R.id.harmonogram_form);
         button.setEnabled(false);
 
         nazwaLeku.addTextChangedListener(new TextWatcher() {
@@ -82,6 +84,13 @@ public class AddDrugActivity extends AppCompatActivity {
 
         edycjaDaty.setOnClickListener(view -> OpenDateDialog());
 
+        harmonogramCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked) {
+                        harmonogramForm.setVisibility(View.VISIBLE); // Pokazuje formularz harmonogramu
+                    } else {
+                        harmonogramForm.setVisibility(View.GONE); // Ukrywa formularz harmonogramu
+                    }
+                });
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
