@@ -47,4 +47,12 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+
+    <string-array name="dawki_array">
+        <item>1 dawka</item>
+        <item>2 dawki</item>
+        <item>3 dawki</item>
+        <item>4 dawki</item>
+    </string-array>
+
 </resources>

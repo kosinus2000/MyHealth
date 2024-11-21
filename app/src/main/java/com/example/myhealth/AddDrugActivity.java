@@ -2,6 +2,7 @@ package com.example.myhealth;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,19 +10,26 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.CheckBox;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -50,6 +58,13 @@ public class AddDrugActivity extends AppCompatActivity {
     private ImageView imageView, gallery, camera;
     private CheckBox harmonogramCheckbox;
     private LinearLayout harmonogramForm;
+    private Spinner spinner;
+    private LinearLayout containerPolaGodzin;
+
+    //--------------------------------------------------
+
+    private String godzinaPrzyjeciaLeku;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +100,12 @@ public class AddDrugActivity extends AppCompatActivity {
         edycjaDaty.setOnClickListener(view -> OpenDateDialog());
 
         harmonogramCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    if (isChecked) {
-                        harmonogramForm.setVisibility(View.VISIBLE); // Pokazuje formularz harmonogramu
-                    } else {
-                        harmonogramForm.setVisibility(View.GONE); // Ukrywa formularz harmonogramu
-                    }
-                });
+            if (isChecked) {
+                harmonogramForm.setVisibility(View.VISIBLE); // Pokazuje formularz harmonogramu
+            } else {
+                harmonogramForm.setVisibility(View.GONE); // Ukrywa formularz harmonogramu
+            }
+        });
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +133,7 @@ public class AddDrugActivity extends AppCompatActivity {
             }
         });
 
-
+        ObslugaSpinera();
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,11 +212,23 @@ public class AddDrugActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    public void OpenTimeDialog(TextInputEditText editText) {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                String selectedTime = String.format("%02d:%02d", hourOfDay, minute);
+                editText.setText(selectedTime);
+            }
+        }, 12, 0, true);
+        timePickerDialog.show();
+    }
+
+
     public void SetDate() {
         lek.setDate(data);
     }
 
-    private void AddFoto(){
+    private void AddFoto() {
         lek.setPhoto(imageView.getDrawingCache());
     }
 
@@ -221,7 +248,56 @@ public class AddDrugActivity extends AppCompatActivity {
         ResetujZdjecie();
 
     }
+
     public void ResetujZdjecie() {
         imageView.setImageResource(0);
+    }
+
+    // NALEZY DOSTOSOWAC METODE DO POTRZEB DODAWANIA GODZINY ORAZ DAWEK Z UWZGLEDNIENIEM NOWYCH
+    // ZMIENNYCH ORAZ DNI TYGODNIA
+    public void ObslugaSpinera() {
+        Spinner spinnerDawki = findViewById(R.id.spinnerDawki);
+        LinearLayout containerPolaGodzin = findViewById(R.id.containerPolaGodzin);
+
+        spinnerDawki.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Odczytaj liczbę dawek z wyboru Spinnera
+                int liczbaDawek = position + 1; // Pozycja odpowiada liczbie dawek (1 dawka = pozycja 0)
+                dodajPolaGodzin(containerPolaGodzin, liczbaDawek);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Nic nie rób
+            }
+        });
+    }
+
+    private void dodajPolaGodzin(LinearLayout container, int liczbaDawek) {
+        // Usuń wszystkie poprzednie pola
+        container.removeAllViews();
+
+        for (int i = 0; i < liczbaDawek; i++) {
+            // Tworzenie nowego pola godziny
+            TextInputLayout textInputLayout = new TextInputLayout(this);
+            textInputLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+            textInputLayout.setHint("Godzina dawki " + (i + 1));
+
+            TextInputEditText textInputEditText = new TextInputEditText(this);
+            textInputEditText.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+            textInputEditText.setInputType(InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_TIME);
+
+            textInputLayout.addView(textInputEditText);
+            container.addView(textInputLayout);
+
+            textInputEditText.setOnClickListener(v -> OpenTimeDialog(textInputEditText));
+        }
     }
 }
