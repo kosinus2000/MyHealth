@@ -1,0 +1,6 @@
+<resources>
+       <declare-styleable name="YourChipStyle">
+           <attr name="chipTextColor" format="color" />
+       </declare-styleable>
+
+   </resources>

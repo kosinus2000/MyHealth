@@ -7,7 +7,6 @@
     android:background="@color/white"
     tools:context=".AddFragment">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +18,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
@@ -29,7 +27,6 @@
                 android:text="Dodaj lek"
                 android:textColor="@color/black"
                 android:textSize="30sp" />
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TextInputLayoutNazwa"
@@ -44,7 +41,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TextInputLayoutIlosc"
@@ -61,7 +57,6 @@
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TextInputLayoutData"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -76,7 +71,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="date" />
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,17 +110,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-
-            <Button
-                android:id="@+id/dodaj"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="40dp"
-                android:onClick="DodajLek"
-                android:text="Dodaj" />
-
-
+            <!-- CheckBox pierwszy -->
             <CheckBox
                 android:id="@+id/harmonogram_checkbox"
                 android:layout_width="wrap_content"
@@ -135,7 +119,7 @@
                 android:layout_marginTop="20dp"
                 android:text="Dodaj harmonogram" />
 
-
+            <!-- Formularz Harmonogramu -->
             <LinearLayout
                 android:id="@+id/harmonogram_form"
                 android:layout_width="match_parent"
@@ -143,7 +127,73 @@
                 android:orientation="vertical"
                 android:padding="16dp"
                 android:visibility="gone">
+                <!-- ChipGroup z dniami tygodnia -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Wybierz dni tygodnia"
+                    android:textSize="16sp" />
 
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:singleLine="false"
+                    app:chipSpacingHorizontal="8dp"
+                    app:chipSpacingVertical="8dp">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipPoniedzialek"
+                        style="@style/Widget.MyApp.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Poniedziałek" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipWtorek"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wtorek"
+                        style="@style/Widget.MyApp.Chip" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSroda"
+                        style="@style/Widget.MyApp.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Środa" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipCzwartek"
+                        style="@style/Widget.MyApp.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Czwartek" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipPiatek"
+                        style="@style/Widget.MyApp.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Piątek" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSobota"
+                        style="@style/Widget.MyApp.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sobota" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipNiedziela"
+                        style="@style/Widget.MyApp.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Niedziela" />
+                </com.google.android.material.chip.ChipGroup>
 
                 <!-- Spinner do wyboru liczby dawek -->
                 <Spinner
@@ -170,6 +220,15 @@
 
             </LinearLayout>
 
+
+            <Button
+                android:id="@+id/dodaj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:onClick="DodajLek"
+                android:text="Dodaj" />
 
         </LinearLayout>
     </ScrollView>

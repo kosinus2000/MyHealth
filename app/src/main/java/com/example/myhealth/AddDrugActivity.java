@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -14,9 +15,9 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -31,18 +32,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.List;
 
 public class AddDrugActivity extends AppCompatActivity {
 
@@ -58,12 +56,10 @@ public class AddDrugActivity extends AppCompatActivity {
     private ImageView imageView, gallery, camera;
     private CheckBox harmonogramCheckbox;
     private LinearLayout harmonogramForm;
-    private Spinner spinner;
-    private LinearLayout containerPolaGodzin;
 
     //--------------------------------------------------
 
-    private String godzinaPrzyjeciaLeku;
+
 
 
     @Override
@@ -101,39 +97,57 @@ public class AddDrugActivity extends AppCompatActivity {
 
         harmonogramCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                harmonogramForm.setVisibility(View.VISIBLE); // Pokazuje formularz harmonogramu
+                harmonogramForm.setVisibility(View.VISIBLE);
             } else {
-                harmonogramForm.setVisibility(View.GONE); // Ukrywa formularz harmonogramu
+                harmonogramForm.setVisibility(View.GONE);
             }
         });
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dexter.withContext(getApplicationContext())
-                        .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE) // Użyj READ_EXTERNAL_STORAGE zamiast MANAGE_EXTERNAL_STORAGE
-                        .withListener(new PermissionListener() {
-                            @Override
-                            public void onPermissionGranted(PermissionGrantedResponse response) {
-                                Intent intent = new Intent(Intent.ACTION_PICK);
-                                intent.setType("image/*");
-                                startActivityForResult(Intent.createChooser(intent, "Wybierz zdjęcie"), 1);
-                            }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Dexter.withContext(getApplicationContext())
+                            .withPermission(Manifest.permission.READ_MEDIA_IMAGES) // Zmienione na READ_MEDIA_IMAGES
+                            .withListener(new PermissionListener() {
+                                @Override
+                                public void onPermissionGranted(PermissionGrantedResponse response) {
+                                    OtwarcieGalerii();
+                                }
 
-                            @Override
-                            public void onPermissionDenied(PermissionDeniedResponse response) {
-                                Toast.makeText(getApplicationContext(), "Uprawnienie do pamięci zostało odrzucone", Toast.LENGTH_SHORT).show();
-                            }
+                                @Override
+                                public void onPermissionDenied(PermissionDeniedResponse response) {
+                                    Toast.makeText(getApplicationContext(), "Uprawnienie do odczytu zdjęć zostało odrzucone", Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                                token.continuePermissionRequest();
-                            }
-                        }).check();
+                                @Override
+                                public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                                    token.continuePermissionRequest();
+                                }
+                            }).check();
+                } else {
+                    Dexter.withContext(getApplicationContext())
+                            .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE) // Starsze uprawnienie dla Androida < 13
+                            .withListener(new PermissionListener() {
+                                @Override
+                                public void onPermissionGranted(PermissionGrantedResponse response) {
+                                    OtwarcieGalerii();
+                                }
+
+                                @Override
+                                public void onPermissionDenied(PermissionDeniedResponse response) {
+                                    Toast.makeText(getApplicationContext(), "Uprawnienie do pamięci zostało odrzucone", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                                    token.continuePermissionRequest();
+                                }
+                            }).check();
+                }
             }
         });
 
-        ObslugaSpinera();
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,6 +173,7 @@ public class AddDrugActivity extends AppCompatActivity {
             }
         });
 
+        ObslugaSpinera();
     }
 
     @Override
@@ -180,6 +195,12 @@ public class AddDrugActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    private void OtwarcieGalerii() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Wybierz zdjęcie"), 1);
+    }
 
     public void AddNameOfDrug() {
         if (lek != null) {
@@ -221,8 +242,10 @@ public class AddDrugActivity extends AppCompatActivity {
             }
         }, 12, 0, true);
         timePickerDialog.show();
-    }
 
+
+        ObslugaSpinera();  //wywołanie spinera
+    }
 
     public void SetDate() {
         lek.setDate(data);
@@ -259,11 +282,19 @@ public class AddDrugActivity extends AppCompatActivity {
         Spinner spinnerDawki = findViewById(R.id.spinnerDawki);
         LinearLayout containerPolaGodzin = findViewById(R.id.containerPolaGodzin);
 
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.dawki_array, // Zasób z elementami spinnera
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDawki.setAdapter(adapter);
+
         spinnerDawki.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Odczytaj liczbę dawek z wyboru Spinnera
-                int liczbaDawek = position + 1; // Pozycja odpowiada liczbie dawek (1 dawka = pozycja 0)
+                int liczbaDawek = position + 1;
                 dodajPolaGodzin(containerPolaGodzin, liczbaDawek);
             }
 
@@ -300,4 +331,5 @@ public class AddDrugActivity extends AppCompatActivity {
             textInputEditText.setOnClickListener(v -> OpenTimeDialog(textInputEditText));
         }
     }
+
 }

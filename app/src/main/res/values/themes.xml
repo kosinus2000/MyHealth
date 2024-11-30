@@ -18,4 +18,11 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+
+    <style name="Widget.MyApp.Chip" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/colorChip</item>
+        <item name="chipStrokeWidth">2dp</item>
+    </style>
+
+
 </resources>
