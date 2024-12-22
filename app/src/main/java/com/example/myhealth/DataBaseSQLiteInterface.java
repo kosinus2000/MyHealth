@@ -1,6 +1,7 @@
 package com.example.myhealth;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.ContentValues;
@@ -46,6 +47,7 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
     }
+
     public void addDrug(AddDrug lek) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -53,22 +55,31 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
         values.put(COLUMN_AMOUNT, lek.getAmount());
         values.put(COLUMN_EXPIRATION_DATE, lek.getFormattedDate());
 
-        
+
         if (lek.getPhoto() != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             lek.getPhoto().compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
             values.put(COLUMN_PHOTO, byteArray);
         }
-        
-        long result  = db.insert(TABLE_NAME, null, values);
-        if (result == -1){
-            Toast.makeText(context,"Failed", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(context,"Succes", Toast.LENGTH_SHORT).show();
+
+        long result = db.insert(TABLE_NAME, null, values);
+        if (result == -1) {
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Succes", Toast.LENGTH_SHORT).show();
         }
 
-        db.close();
+
     }
 
+    Cursor readAllData() {
+        String quety = "SELECT * FROM " + TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (db != null) {
+            db.rawQuery(quety, null);
+        }
+        return cursor;
+    }
 }
