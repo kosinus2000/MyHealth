@@ -3,7 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
 
     <application
         android:allowBackup="true"
@@ -24,9 +30,7 @@
             android:exported="false"
             android:label="@string/title_activity_add_drug"
             android:theme="@style/Theme.NavigationDrawer" />
-        <activity
-            android:name=".ui.theme.AddDrugActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

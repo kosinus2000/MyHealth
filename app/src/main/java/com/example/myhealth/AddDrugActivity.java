@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -86,8 +87,15 @@ public class AddDrugActivity extends AppCompatActivity {
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String permission;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    permission = Manifest.permission.READ_MEDIA_IMAGES;
+                } else {
+                    permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+                }
+
                 Dexter.withContext(getApplicationContext())
-                        .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE) // Użyj READ_EXTERNAL_STORAGE zamiast MANAGE_EXTERNAL_STORAGE
+                        .withPermission(permission)
                         .withListener(new PermissionListener() {
                             @Override
                             public void onPermissionGranted(PermissionGrantedResponse response) {
@@ -98,7 +106,7 @@ public class AddDrugActivity extends AppCompatActivity {
 
                             @Override
                             public void onPermissionDenied(PermissionDeniedResponse response) {
-                                Toast.makeText(getApplicationContext(), "Uprawnienie do pamięci zostało odrzucone", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Uprawnienie do odczytu mediów zostało odrzucone", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -108,6 +116,7 @@ public class AddDrugActivity extends AppCompatActivity {
                         }).check();
             }
         });
+
 
 
         camera.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +143,7 @@ public class AddDrugActivity extends AppCompatActivity {
                         }).check();
             }
         });
+
 
     }
 
