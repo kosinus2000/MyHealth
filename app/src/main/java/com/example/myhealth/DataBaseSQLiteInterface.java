@@ -74,11 +74,12 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
     }
 
     Cursor readAllData() {
-        String quety = "SELECT * FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
+
         Cursor cursor = null;
         if (db != null) {
-            db.rawQuery(quety, null);
+            cursor = db.rawQuery(query, null);
         }
         return cursor;
     }
