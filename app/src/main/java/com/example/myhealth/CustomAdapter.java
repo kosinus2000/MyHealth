@@ -17,11 +17,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private Context context;
     private ArrayList<String> drug_id, drug_name, drug_amount, drug_expiration_date;
 
-    CustomAdapter(Context context,
-                  ArrayList drug_id,
-                  ArrayList drug_name,
-                  ArrayList drug_amount,
-                  ArrayList drug_expiration_date) {
+    CustomAdapter(Context context, ArrayList<String> drug_id, ArrayList<String> drug_name,
+                  ArrayList<String> drug_amount, ArrayList<String> drug_expiration_date) {
         this.context = context;
         this.drug_id = drug_id;
         this.drug_name = drug_name;
@@ -35,15 +32,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.my_row, parent, false);
         return new MyViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomAdapter.MyViewHolder holder, int position) {
-        holder.drug_id_txt.setText(String.valueOf(drug_id.get(position)));
-        holder.drug_name_txt.setText(String.valueOf(drug_name.get(position)));
-        holder.drug_expiration_date_txt.setText(String.valueOf(drug_expiration_date.get(position)));
-        holder.drug_amount_txt.setText(String.valueOf(drug_amount.get(position)));
+        holder.drug_id_txt.setText(drug_id.get(position));
+        holder.drug_name_txt.setText(drug_name.get(position));
+        holder.drug_expiration_date_txt.setText(drug_expiration_date.get(position));
+        holder.drug_amount_txt.setText(drug_amount.get(position));
     }
 
     @Override
@@ -51,8 +47,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return drug_id.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView drug_id_txt, drug_name_txt, drug_expiration_date_txt, drug_amount_txt;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -61,7 +56,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             drug_name_txt = itemView.findViewById(R.id.drug_name_txt);
             drug_expiration_date_txt = itemView.findViewById(R.id.drug_expiration_date_txt);
             drug_amount_txt = itemView.findViewById(R.id.drug_amount_txt);
-
         }
     }
 }
