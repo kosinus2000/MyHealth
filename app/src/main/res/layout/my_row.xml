@@ -64,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Powiadomienie"
+                android:onClick="setNotification"
                 app:layout_constraintBottom_toBottomOf="@+id/drug_id_txt"
                 app:layout_constraintStart_toEndOf="@+id/drug_amount_txt"
                 app:layout_constraintTop_toTopOf="@+id/drug_id_txt" />

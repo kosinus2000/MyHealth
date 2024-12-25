@@ -62,4 +62,7 @@ public class ListOfDrugs extends AppCompatActivity {
             }
         }
     }
+   public void setNotification(View view) {
+
+   }
 }
