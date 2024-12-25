@@ -42,6 +42,7 @@ public class AddDrugActivity extends AppCompatActivity {
     private Button button;
     private EditText nazwaLeku;
     private EditText edycjaDaty;
+    private EditText dawka;
     private LocalDate obecnaData = LocalDate.now();
     private int obecnyDzien = obecnaData.getDayOfMonth();
     private int obecnyMiesiac = obecnaData.getMonthValue();
@@ -63,6 +64,7 @@ public class AddDrugActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         camera = findViewById(R.id.imageButton);
         gallery = findViewById(R.id.imageButtonFromFile);
+        dawka = findViewById(R.id.textInputEditTextDawka);
 
         button.setEnabled(false);
 
@@ -116,7 +118,6 @@ public class AddDrugActivity extends AppCompatActivity {
                         }).check();
             }
         });
-
 
 
         camera.setOnClickListener(new View.OnClickListener() {
@@ -187,42 +188,58 @@ public class AddDrugActivity extends AppCompatActivity {
         }
     }
 
-    public void OpenDateDialog() {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (datePicker, year, month, day) -> {
-            String selectedDate = String.format("%02d.%02d.%04d", day, month + 1, year);
-            edycjaDaty.setText(selectedDate);
-            data = selectedDate;
-
-            Toast.makeText(this, "data--->" + data, Toast.LENGTH_LONG).show();
-        }, obecnyRok, obecnyMiesiac, obecnyDzien);
-        datePickerDialog.show();
-    }
-
-    public void SetDate() {
-        lek.setDate(data);
-    }
-
-    private void AddFoto(){
-        lek.setPhoto(imageView.getDrawingCache());
-    }
-
-    public void DodajLek(View v) {
-        lek = new AddDrug();
-        AddNameOfDrug();
-        AddAmountOfDrug();
-        SetDate();
-        AddFoto();
-        DataBaseSQLiteInterface dbHelper = new DataBaseSQLiteInterface(this);
-        dbHelper.addDrug(lek);
-        nazwaLeku.setText("");
-        EditText textIlosc = findViewById(R.id.textInputEditTextIlosc);
-        textIlosc.setText("");
-        edycjaDaty.setText("");
-        button.setEnabled(false);
-        ResetujZdjecie();
+    public void AddDose() {
+        String textValue = dawka.getText().toString();
+        try {
+            int dose = Integer.parseInt(textValue);
+            if (lek != null){
+                lek.setDose(dose);
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Proszę wprowadzić poprawną liczbę dla dawki", Toast.LENGTH_SHORT).show();
+        }
 
     }
-    public void ResetujZdjecie() {
-        imageView.setImageResource(0);
-    }
+
+
+public void OpenDateDialog() {
+    DatePickerDialog datePickerDialog = new DatePickerDialog(this, (datePicker, year, month, day) -> {
+        String selectedDate = String.format("%02d.%02d.%04d", day, month + 1, year);
+        edycjaDaty.setText(selectedDate);
+        data = selectedDate;
+
+        Toast.makeText(this, "data--->" + data, Toast.LENGTH_LONG).show();
+    }, obecnyRok, obecnyMiesiac, obecnyDzien);
+    datePickerDialog.show();
 }
+
+public void SetDate() {
+    lek.setDate(data);
+}
+
+private void AddFoto() {
+    lek.setPhoto(imageView.getDrawingCache());
+}
+
+public void DodajLek(View v) {
+    lek = new AddDrug();
+    AddNameOfDrug();
+    AddAmountOfDrug();
+    AddDose();
+    SetDate();
+    AddFoto();
+    DataBaseSQLiteInterface dbHelper = new DataBaseSQLiteInterface(this);
+    dbHelper.addDrug(lek);
+    nazwaLeku.setText("");
+    EditText textIlosc = findViewById(R.id.textInputEditTextIlosc);
+    textIlosc.setText("");
+    edycjaDaty.setText("");
+    button.setEnabled(false);
+    ResetujZdjecie();
+
+}
+
+public void ResetujZdjecie() {
+    imageView.setImageResource(0);
+}
+    }

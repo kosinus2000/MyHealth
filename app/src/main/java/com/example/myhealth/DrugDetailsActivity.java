@@ -1,6 +1,5 @@
 package com.example.myhealth;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,11 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DrugDetailsActivity extends AppCompatActivity {
 
-    TextView drugNameText, drugAmountText;
+    TextView drugNameText, drugAmountText, drugDoseText;
     Button btnTakeDrug;
-    SharedPreferences sharedPreferences;
+    DataBaseSQLiteInterface myDB;
     String drugId;
     int drugAmount;
+    int drugDose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,25 +23,27 @@ public class DrugDetailsActivity extends AppCompatActivity {
 
         drugNameText = findViewById(R.id.drug_name);
         drugAmountText = findViewById(R.id.drug_amount);
+        drugDoseText = findViewById(R.id.drug_dose); // Dodaj ten element w swoim layoucie
         btnTakeDrug = findViewById(R.id.btn_take_drug);
-        sharedPreferences = getSharedPreferences("DrugPrefs", MODE_PRIVATE);
+        myDB = new DataBaseSQLiteInterface(this);
 
-        // Pobierz drugId i drugName z Intent
+
         drugId = getIntent().getStringExtra("drug_id");
         String drugName = getIntent().getStringExtra("drug_name");
 
-        // Pobierz ilość leku z SharedPreferences
-        drugAmount = sharedPreferences.getInt(drugId + "_amount", 0);
+
+        drugAmount = myDB.getDrugAmount(drugId);
+        drugDose = myDB.getDrugDose(drugId);
 
         drugNameText.setText(drugName);
         drugAmountText.setText("Ilość leku: " + drugAmount);
+        drugDoseText.setText("Dawka leku: " + drugDose);
 
         btnTakeDrug.setOnClickListener(view -> {
             if (drugAmount > 0) {
-                drugAmount--;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt(drugId + "_amount", drugAmount);
-                editor.apply();
+                drugAmount -= drugDose;
+                if (drugAmount < 0) drugAmount = 0; // Upewnij się, że ilość nie jest mniejsza niż 0
+                myDB.updateDrugAmount(drugId, drugAmount);
                 drugAmountText.setText("Ilość leku: " + drugAmount);
                 Toast.makeText(this, "Lek przyjęty", Toast.LENGTH_SHORT).show();
             } else {

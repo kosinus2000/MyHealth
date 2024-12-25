@@ -24,7 +24,7 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
     private static final String COLUMN_AMOUNT = "amount";
     private static final String COLUMN_EXPIRATION_DATE = "expiration_date";
     private static final String COLUMN_PHOTO = "photo";
-
+    private static final String COLUMN_DOSE = "dose";
 
     public DataBaseSQLiteInterface(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,7 +38,8 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
                 COLUMN_NAME + " TEXT NOT NULL, " +
                 COLUMN_AMOUNT + " INTEGER, " +
                 COLUMN_EXPIRATION_DATE + " TEXT, " +
-                COLUMN_PHOTO + " BLOB);";
+                COLUMN_PHOTO + " BLOB," +
+                COLUMN_DOSE + " INTEGER);";
 
         sqLiteDatabase.execSQL(query);
     }
@@ -54,7 +55,7 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
         values.put(COLUMN_NAME, lek.getName());
         values.put(COLUMN_AMOUNT, lek.getAmount());
         values.put(COLUMN_EXPIRATION_DATE, lek.getFormattedDate());
-
+        values.put(COLUMN_DOSE, lek.getDose());
 
         if (lek.getPhoto() != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -82,5 +83,34 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
             cursor = db.rawQuery(query, null);
         }
         return cursor;
+    }
+
+    public int getDrugAmount(String drugId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_AMOUNT + " FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?", new String[]{drugId});
+        int amount = 0;
+        if (cursor.moveToFirst()) {
+            amount = cursor.getInt(0);
+        }
+        cursor.close();
+        return amount;
+    }
+
+    public int getDrugDose(String drugId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_DOSE + " FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?", new String[]{drugId});
+        int dose = 0;
+        if (cursor.moveToFirst()) {
+            dose = cursor.getInt(0);
+        }
+        cursor.close();
+        return dose;
+    }
+
+    public void updateDrugAmount(String drugId, int newAmount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_AMOUNT, newAmount);
+        db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{drugId});
     }
 }

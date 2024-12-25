@@ -15,6 +15,16 @@ public class AddDrug {
     private DateTimeFormatter formatka = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private Bitmap photo;
 
+    public int getDose() {
+        return dose;
+    }
+
+    public void setDose(int dose) {
+        this.dose = dose;
+    }
+
+    private int dose;
+
     public AddDrug() {
         this.id = ++idCounter;
         this.name = name;
