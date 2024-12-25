@@ -29,8 +29,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "drug_channel")
-                .setSmallIcon(R.drawable.ic_notification)  // Upewnij się, że masz tę ikonę w katalogu res/drawable
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notification))  // Opcjonalnie dodaj większą ikonę
+                .setSmallIcon(R.drawable.ic_notification)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_notification))
                 .setContentTitle("Przyjmij lek")
                 .setContentText("Czas na przyjęcie leku: " + drugName)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

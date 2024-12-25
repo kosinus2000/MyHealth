@@ -113,4 +113,11 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
         values.put(COLUMN_AMOUNT, newAmount);
         db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{drugId});
     }
+    public boolean deleteDrug(String drugId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{drugId});
+        return result != 0; // Zwraca true, jeśli usunięto przynajmniej jeden wiersz
+    }
+
+
 }

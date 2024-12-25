@@ -13,14 +13,16 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,20 +40,22 @@ public class ListOfDrugs extends AppCompatActivity {
     ArrayList<String> drug_id, drug_name, drug_amount, drug_expiration_date;
     CustomAdapter customAdapter;
 
-    private static final String TAG = "ListOfDrugs";
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_drugs);
 
-        // Sprawdzanie wersji Androida i uprawnień
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!canScheduleExactAlarms()) {
-                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-                startActivity(intent);
+        // Sprawdzanie uprawnień do wysyłania powiadomień
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
             }
         }
+
+        // Tworzenie kanału powiadomień
+        createNotificationChannel();
 
         recyclerView = findViewById(R.id.listOfDrugs);
         floatingActionButton = findViewById(R.id.floatingAddButton);
@@ -73,7 +77,10 @@ public class ListOfDrugs extends AppCompatActivity {
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Tworzenie kanału powiadomień
+
+    }
+
+    private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "drug_channel";
             String description = "Channel for drug notifications";
@@ -86,15 +93,7 @@ public class ListOfDrugs extends AppCompatActivity {
         }
     }
 
-    private boolean canScheduleExactAlarms() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            return alarmManager != null && alarmManager.canScheduleExactAlarms();
-        }
-        return true; // Dla starszych wersji Androida zakładamy, że możemy ustawiać dokładne alarmy
-    }
-
-    void storeDataInArrays() {
+    private void storeDataInArrays() {
         Cursor cursor = myDB.readAllData();
         if (cursor.getCount() == 0) {
             Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
@@ -108,7 +107,35 @@ public class ListOfDrugs extends AppCompatActivity {
         }
     }
 
+    // Obsługa wyniku prośby o uprawnienia
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Uprawnienia do wysyłania powiadomień przyznane", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Uprawnienia do wysyłania powiadomień odrzucone", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private boolean canScheduleExactAlarms() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            return alarmManager != null && alarmManager.canScheduleExactAlarms();
+        }
+        return true;
+    }
+
     public void setNotification(View view) {
+
+        ConstraintLayout parent = (ConstraintLayout) view.getParent();
+        TextView drugIdTextView = parent.findViewById(R.id.drug_id_txt);
+        TextView drugNameTextView = parent.findViewById(R.id.drug_name_txt);
+        String drugId = drugIdTextView.getText().toString();
+        String drugName = drugNameTextView.getText().toString();
+
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -131,11 +158,9 @@ public class ListOfDrugs extends AppCompatActivity {
                     calendar.set(Calendar.MINUTE, minute1);
                     calendar.set(Calendar.SECOND, 0);
 
-                    Log.d(TAG, "Ustawianie alarmu na: " + calendar.getTime().toString());
+                    Log.d("ListOfDrugs", "Ustawianie alarmu na: " + calendar.getTime().toString());
 
                     Intent intent = new Intent(this, NotificationReceiver.class);
-                    String drugId = "1"; // Przykład, przekaż właściwe drug_id
-                    String drugName = "Przykład"; // Przykład, przekaż właściwe drug_name
                     intent.putExtra("drug_id", drugId);
                     intent.putExtra("drug_name", drugName);
 
@@ -143,9 +168,9 @@ public class ListOfDrugs extends AppCompatActivity {
                     AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     if (alarmManager != null) {
                         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-                        Log.d(TAG, "Alarm został ustawiony");
+                        Log.d("ListOfDrugs", "Alarm został ustawiony");
                     } else {
-                        Log.e(TAG, "AlarmManager jest null");
+                        Log.e("ListOfDrugs", "AlarmManager jest null");
                     }
 
                     Toast.makeText(this, "Powiadomienie ustawione na: " + dayOfMonth + "/" + (month1 + 1) + "/" + year1 + " " + hourOfDay + ":" + minute1, Toast.LENGTH_SHORT).show();

@@ -32,7 +32,7 @@
                 android:id="@+id/drug_name_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:text="Nazwa leku"
                 android:textColor="#000"
                 android:textStyle="bold"
@@ -50,10 +50,10 @@
 
             <TextView
                 android:id="@+id/drug_amount_txt"
-                android:layout_width="63dp"
-                android:layout_height="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Ilość leku"
+                android:text="Ilość"
                 app:layout_constraintBottom_toBottomOf="@+id/drug_id_txt"
                 app:layout_constraintStart_toEndOf="@+id/drug_expiration_date_txt"
                 app:layout_constraintTop_toTopOf="@+id/drug_id_txt" />
@@ -62,12 +62,22 @@
                 android:id="@+id/notification_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Powiadomienie"
+                android:layout_marginEnd="8dp"
                 android:onClick="setNotification"
-                app:layout_constraintBottom_toBottomOf="@+id/drug_id_txt"
-                app:layout_constraintStart_toEndOf="@+id/drug_amount_txt"
-                app:layout_constraintTop_toTopOf="@+id/drug_id_txt" />
+                android:text="Powiadomienie"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/remove_btn"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/remove_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="removeDrug"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/nav_delete" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
