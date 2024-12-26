@@ -8,6 +8,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 public class DrugDetailsActivity extends AppCompatActivity {
     TextView drugNameText, drugAmountText, drugDoseText;
@@ -40,11 +42,25 @@ public class DrugDetailsActivity extends AppCompatActivity {
                 myDB.updateDrugAmount(drugId, drugAmount);
                 drugAmountText.setText("Ilość leku: " + drugAmount);
                 Toast.makeText(this, "Lek przyjęty", Toast.LENGTH_SHORT).show();
+                if (drugAmount <= 5) {
+                    showLowStockNotification(drugName);
+                }
                 launchHome(view);
             } else {
                 Toast.makeText(this, "Brak leku", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showLowStockNotification(String drugName) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "low_stock_channel")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("Niski poziom leku")
+                .setContentText("Ilość leku " + drugName + " jest niska. Zakup nowe opakowanie.")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(2, builder.build());
     }
 
     public void launchHome(View view) {
