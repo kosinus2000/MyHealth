@@ -15,7 +15,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter; // Dodano import dla ArrayAdapter
 import android.widget.DatePicker;
+import android.widget.Spinner; // Dodano import dla Spinner
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ import java.util.Calendar;
 public class ListOfDrugs extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton floatingActionButton;
+    Spinner spinnerSearchCondition; // Dodano Spinner do wyszukiwania według schorzenia
     DataBaseSQLiteInterface myDB;
     ArrayList<String> drug_id, drug_name, drug_amount, drug_expiration_date;
     CustomAdapter customAdapter;
@@ -59,6 +62,7 @@ public class ListOfDrugs extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.listOfDrugs);
         floatingActionButton = findViewById(R.id.floatingAddButton);
+        spinnerSearchCondition = findViewById(R.id.spinner_search_condition); // Inicjalizacja Spinnera
 
         floatingActionButton.setOnClickListener(view -> {
             Intent intent = new Intent(ListOfDrugs.this, AddDrugActivity.class);
@@ -77,7 +81,10 @@ public class ListOfDrugs extends AppCompatActivity {
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
+        // Ustawienie adaptera dla Spinnera
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.condition_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSearchCondition.setAdapter(adapter);
     }
 
     private void createNotificationChannel() {
@@ -129,7 +136,6 @@ public class ListOfDrugs extends AppCompatActivity {
     }
 
     public void setNotification(View view) {
-
         ConstraintLayout parent = (ConstraintLayout) view.getParent();
         TextView drugIdTextView = parent.findViewById(R.id.drug_id_txt);
         TextView drugNameTextView = parent.findViewById(R.id.drug_name_txt);
@@ -182,5 +188,28 @@ public class ListOfDrugs extends AppCompatActivity {
             timePickerDialog.show();
         }, year, month, day);
         datePickerDialog.show();
+    }
+
+    public void searchByCondition(View view) {
+        String condition = spinnerSearchCondition.getSelectedItem().toString();
+        Cursor cursor = myDB.getDrugsByCondition(condition);
+
+        drug_id.clear();
+        drug_name.clear();
+        drug_amount.clear();
+        drug_expiration_date.clear();
+
+        if (cursor.getCount() == 0) {
+            Toast.makeText(this, "Brak danych", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                drug_id.add(cursor.getString(0));
+                drug_name.add(cursor.getString(1));
+                drug_amount.add(cursor.getString(2));
+                drug_expiration_date.add(cursor.getString(3));
+            }
+        }
+
+        customAdapter.notifyDataSetChanged();
     }
 }

@@ -16,7 +16,7 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
     AddDrug lek = new AddDrug();
     private Context context;
     private static final String DATABASE_NAME = "MyHealth.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String TABLE_NAME = "drug_list";
     private static final String COLUMN_ID = "id";
@@ -25,6 +25,7 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
     private static final String COLUMN_EXPIRATION_DATE = "expiration_date";
     private static final String COLUMN_PHOTO = "photo";
     private static final String COLUMN_DOSE = "dose";
+    private static final String COLUMN_CONDITION = "condition";
 
     public DataBaseSQLiteInterface(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,8 +39,9 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
                 COLUMN_NAME + " TEXT NOT NULL, " +
                 COLUMN_AMOUNT + " INTEGER, " +
                 COLUMN_EXPIRATION_DATE + " TEXT, " +
-                COLUMN_PHOTO + " BLOB," +
-                COLUMN_DOSE + " INTEGER);";
+                COLUMN_PHOTO + " BLOB, " +
+                COLUMN_DOSE + " INTEGER, " +
+                COLUMN_CONDITION + " TEXT);";
 
         sqLiteDatabase.execSQL(query);
     }
@@ -47,6 +49,7 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(sqLiteDatabase); // Dodaj to, aby ponownie utworzyć tabelę po jej usunięciu
     }
 
     public void addDrug(AddDrug lek) {
@@ -56,6 +59,7 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
         values.put(COLUMN_AMOUNT, lek.getAmount());
         values.put(COLUMN_EXPIRATION_DATE, lek.getFormattedDate());
         values.put(COLUMN_DOSE, lek.getDose());
+        values.put(COLUMN_CONDITION, lek.getCondition());
 
         if (lek.getPhoto() != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -70,8 +74,6 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, "Succes", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     Cursor readAllData() {
@@ -113,11 +115,16 @@ public class DataBaseSQLiteInterface extends SQLiteOpenHelper {
         values.put(COLUMN_AMOUNT, newAmount);
         db.update(TABLE_NAME, values, COLUMN_ID + " = ?", new String[]{drugId});
     }
+
     public boolean deleteDrug(String drugId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int result = db.delete(TABLE_NAME, COLUMN_ID + " = ?", new String[]{drugId});
-        return result != 0; // Zwraca true, jeśli usunięto przynajmniej jeden wiersz
+        return result != 0;
     }
 
-
+    // Dodaj metodę getDrugsByCondition
+    public Cursor getDrugsByCondition(String condition) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_CONDITION + " = ?", new String[]{condition});
+    }
 }

@@ -14,6 +14,7 @@ public class AddDrug {
     private LocalDate expirationDate;
     private DateTimeFormatter formatka = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private Bitmap photo;
+    private String condition;
 
     public int getDose() {
         return dose;
@@ -52,6 +53,7 @@ public class AddDrug {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
     public LocalDate getExpirationDate() {
         return expirationDate;
     }
@@ -74,5 +76,13 @@ public class AddDrug {
 
     public void setPhoto(Bitmap photo) {
         this.photo = photo;
+    }
+
+    public void setCondition(String condition) {
+        this.condition = condition;
+    }
+
+    public String getCondition() {
+        return condition;
     }
 }

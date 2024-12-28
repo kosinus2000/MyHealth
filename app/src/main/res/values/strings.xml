@@ -47,4 +47,11 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+
+    <string-array name="condition_array">
+        <item>Nadciśnienie</item>
+        <item>Cukrzyca</item>
+        <item>Alergie</item>
+        <item>Inne</item>
+    </string-array>
 </resources>

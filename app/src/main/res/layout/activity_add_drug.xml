@@ -95,6 +95,17 @@
             android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Spinner: Schorzenie -->
+    <Spinner
+        android:id="@+id/spinner_condition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:entries="@array/condition_array"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TextInputLayoutData" />
+
     <!-- Widok zdjęcia -->
     <ImageView
         android:id="@+id/imageView"
@@ -103,9 +114,8 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/bg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.189"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TextInputLayoutData"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_condition"
         tools:src="@drawable/addfoto" />
 
     <!-- Przycisk Dodaj -->
