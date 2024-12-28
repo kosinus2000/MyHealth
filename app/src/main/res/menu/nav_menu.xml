@@ -24,7 +24,7 @@
         <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/nav_calendar"
-            android:title="Harmonogram"/>
+            android:title="Historia Zdrowia"/>
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/nav_settings"

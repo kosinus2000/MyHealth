@@ -1,5 +1,6 @@
 package com.example.myhealth;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -53,6 +54,7 @@ public class HarmonogramFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        launchHealthHistory();
     }
 
     @Override
@@ -60,5 +62,9 @@ public class HarmonogramFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_harmonogram, container, false);
+    }
+    public void launchHealthHistory() {
+        Intent intent = new Intent(getActivity(), HealthHistoryActivity.class);
+        startActivity(intent);
     }
 }
