@@ -1,5 +1,7 @@
 package com.example.myhealth;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ public class DrugDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drug_details);
+        createNotificationChannel();
+
         drugNameText = findViewById(R.id.drug_name);
         drugAmountText = findViewById(R.id.drug_amount);
         drugDoseText = findViewById(R.id.drug_dose);
@@ -79,4 +83,18 @@ public class DrugDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+    private void createNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            CharSequence name = "Niski stan leku";
+            String description = "Powiadomienia o niskim poziomie leku w zapasach";
+            int importance = NotificationManager.IMPORTANCE_HIGH; // Poprawione
+            NotificationChannel channel = new NotificationChannel("low_stock_channel", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+
 }
