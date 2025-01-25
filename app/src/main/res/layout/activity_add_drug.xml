@@ -12,14 +12,13 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         android:text="Dodaj lek"
+        android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <!-- Pole tekstowe: Nazwa leku -->
     <com.google.android.material.textfield.TextInputLayout
@@ -58,6 +57,25 @@
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Pole tekstowe: Dawka -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TextInputLayoutDawka"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Dawka"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TextInputLayoutIlosc">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextDawka"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <!-- Pole tekstowe: Termin ważności -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/TextInputLayoutData"
@@ -68,7 +86,7 @@
         android:hint="Termin ważności"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TextInputLayoutIlosc">
+        app:layout_constraintTop_toBottomOf="@id/TextInputLayoutDawka">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextData"
@@ -77,16 +95,88 @@
             android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Spinner: Schorzenie -->
+    <Spinner
+        android:id="@+id/spinner_condition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:entries="@array/condition_array"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TextInputLayoutData" />
+
+    <!-- Widok zdjęcia -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_condition"
+        tools:src="@drawable/addfoto" />
+
     <!-- Przycisk Dodaj -->
     <Button
         android:id="@+id/dodaj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Dodaj"
+        android:layout_marginTop="40dp"
         android:onClick="DodajLek"
+        android:text="Dodaj"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TextInputLayoutData" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <!-- Przycisk Dodaj -->
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg"
+        android:shape="rectangle"
+        android:src="@drawable/button_camera"
+        android:contentDescription="Dodaj zdjęcie za pomocą aparatu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <ImageButton
+        android:id="@+id/imageButtonFromFile"
+        android:layout_marginTop="47dp"
+        android:background="@drawable/bg"
+        android:src="@drawable/addfoto"
+        android:shape="rectangle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="Dodaj zdjęcie z pliku"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Camera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Z dysku"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonFromFile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

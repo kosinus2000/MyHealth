@@ -2,6 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,13 +23,24 @@
         android:theme="@style/Theme.NavigationDrawer"
         tools:targetApi="31">
         <activity
+            android:name=".DrugHistoryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.NavigationDrawer" />
+        <activity
+            android:name=".HealthHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DrugDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListOfDrugs"
+            android:exported="false"
+            android:theme="@style/Theme.NavigationDrawer" />
+        <activity
             android:name=".AddDrugActivity"
             android:exported="false"
             android:label="@string/title_activity_add_drug"
             android:theme="@style/Theme.NavigationDrawer" />
-        <activity
-            android:name=".ui.theme.AddDrugActivity"
-            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -34,6 +55,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <receiver android:name=".NotificationReceiver" />
     </application>
 
 </manifest>

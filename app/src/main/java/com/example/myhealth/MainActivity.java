@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
         } else if (item.getItemId() == R.id.nav_settings) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
 
         } else if (item.getItemId() == R.id.nav_add) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddFragment()).commit();
@@ -59,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.nav_about) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
 
+        } else if (item.getItemId() == R.id.nav_list) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListFragment()).commit();
+
+        } else if (item.getItemId() == R.id.nav_calendar) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HarmonogramFragment()).commit();
         } else if (item.getItemId() == R.id.nav_logout) {
             Toast.makeText(this, "Logout!", Toast.LENGTH_SHORT).show();
         }
@@ -76,8 +81,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-    public void launchAddDrug(View v){
+
+    public void launchAddDrug(View v) {
         Intent i = new Intent(this, AddDrugActivity.class);
         startActivity(i);
     }
+
+    public void launchListOfDrugs(View v) {
+        Intent i = new Intent(this, ListOfDrugs.class);
+        startActivity(i);
+    }
+
+    public void launchHistoryOfHealth(View v) {
+        Intent i = new Intent(this, HealthHistoryActivity.class);
+        startActivity(i);
+    }
+
+    public void launchDrugHistory(View view) {
+        Intent intent = new Intent(this, DrugHistoryActivity.class);
+        startActivity(intent);
+    }
+
 }
